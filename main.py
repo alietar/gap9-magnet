@@ -3,21 +3,21 @@ import time
 
 from gcode import *
 
-
-length = 25
-width = 25
-height = 5
+# In mm
+length = 10
+width = 10
+height = 10
 
 nb_length = 5 # Number of points to measure lengthwise
 nb_width = 5 # Number of points to measure widthwise
 nb_height = 2 # Number of points to measure heightwise
 
-#commands = [, "G90", "G1 X10 F100", "G4 P0", "G1 X0 F100"]
-
 
 print("--- Measure of electromagnetism for GAP9 ---")
 
-machine = Machine("/dev/ttyUSB0", debug=False)
+port = input("Enter the machine's port (e.g. /dev/ttyUSB0): ")
+
+machine = Machine(port, debug=False)
 
 print("-> Move the speaker to the desired starting position")
 
@@ -27,7 +27,7 @@ while(user_input != "start"):
 
 machine.send("G92 X0 Y0 Z0") # Reset home coordinates
 machine.send("G90") # Set coordinates to absolute
-machine.send("G0 F500") # Set speed
+machine.send("G0 F2000") # Set speed
 
 
 print("--- Starting the measures ---")
@@ -45,7 +45,7 @@ for i in range(nb_height):
             y = length_gap * k
             machine.send(f"G0 X{str(x)} Y{str(y)} Z{str(z)}", wait=True)
 
-machine.send(f"G0 X0 Y0")
+machine.send(f"G0 X0 Y0 Z0")
 
 
 machine.close()

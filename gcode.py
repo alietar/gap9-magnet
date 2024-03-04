@@ -26,7 +26,7 @@ class Machine:
 
     def send(self, code, wait=False):
         if wait:
-            self.send_list([code, "G4 P0"])
+            self.send_list([code, "G4 P0"]) # Machine will wait for this instruction to be done before continuing, it's a wait equivalent in gcode
 
         # Skip if the command is empty or is a comment
         if code.strip().startswith(';') or code.isspace() or len(code) <=0:
@@ -51,17 +51,6 @@ class Machine:
 
         for code in code_list:
             self.send(code)
-
-
-    def listen(self):
-        while(1): # Wait until the former gcode has been completed.
-            grbl_out = self.s.readline()
-            grbl_response = grbl_out.strip().decode('utf-8')
-
-            self.print_user(f"Response: {grbl_response}")
-
-            if grbl_response.startswith("ok"):
-                break
 
 
     def print_user(self, msg):
